@@ -35,3 +35,4 @@ def index():
     comment = Comment(content=request.form["contents"])
     db.session.add(comment)
     db.session.commit()
+    return redirect(url_for('index'))
