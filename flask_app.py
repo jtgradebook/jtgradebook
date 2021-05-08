@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required, login_user, LoginManager, logout_user, UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -22,6 +23,7 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 app.secret_key = "something only you know"
 login_manager = LoginManager()
@@ -58,12 +60,12 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(4096))
-
+    posted = db.Column(db.DateTime, default=datetime.now)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("main_page.html", comments=Comment.query.all(), timestamp=datetime.now())
+        return render_template("main_page.html", comments=Comment.query.all())
     if not current_user.is_authenticated:
         return redirect(url_for('index'))
 
