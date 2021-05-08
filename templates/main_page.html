@@ -21,6 +21,13 @@
               </button>
               <a class="navbar-brand" href="#">My scratchpad</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Log in</a></li>
+                {% endif %}
+            </ul>
           </div>
         </nav>
 
@@ -31,14 +38,14 @@
                     {{ comment.content }}
                 </div>
             {% endfor %}
-
+        {% if current_user.is_authenticated %}
             <div class="row">
                 <form action="." method="POST">
                     <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
                     <input type="submit" class="btn btn-success" value="Post comment">
                 </form>
             </div>
-
+        {% endif %}
         </div>
 
     </body>

@@ -3,7 +3,7 @@
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_user, LoginManager, UserMixin
+from flask_login import login_required, login_user, LoginManager, logout_user, UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -69,19 +69,6 @@ def index():
     db.session.commit()
     return redirect(url_for('index'))
 
-#@app.route("/login/")
-#def login():
-#    return render_template("login_page.html")
-#@app.route("/login/", methods=["GET", "POST"])
-#def login():
-#    if request.method == "GET":
-#        return render_template("login_page.html", error=False)
-
-#    if request.form["username"] != "admin" or request.form["password"] != "secret":
-#        return render_template("login_page.html", error=True)
-
-#    return redirect(url_for('index'))
-
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -96,4 +83,10 @@ def login():
         return render_template("login_page.html", error=True)
 
     login_user(user)
+    return redirect(url_for('index'))
+
+@app.route("/logout/")
+@login_required
+def logout():
+    logout_user()
     return redirect(url_for('index'))
