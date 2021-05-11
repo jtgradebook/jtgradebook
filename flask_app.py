@@ -55,7 +55,7 @@ class Students(db.Model):
     major = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
 
-class Assignment(db.Model):
+class Assignments(db.Model):
 
     __tablename__ = "assignments"
 
@@ -124,6 +124,11 @@ def student():
 def add_students():
     if request.method == "GET":
         return render_template("add_user.html")
+
+@app.route("/assignments")
+def assignments():
+    myAssignments = Assignments.query.all()
+    return render_template("assignments.html", myAssignments=myAssignments)
 
 @app.route("/add/assignment", methods=["GET", "POST"])
 def add_assignment():
