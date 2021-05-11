@@ -4,9 +4,9 @@
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required, login_user, LoginManager, logout_user, UserMixin
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 from datetime import datetime
-from flask_migrate import Migrate
+#from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+#migrate = Migrate(app, db)
 
 app.secret_key = "something only you know"
 login_manager = LoginManager()
@@ -43,6 +43,36 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return self.username
+
+#
+class Students(db.Model):
+
+    __tablename__ = "students"
+
+    id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(200), nullable=False)
+    lname = db.Column(db.String(200), nullable=False)
+    major = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False, unique=True)
+
+class Assignment(db.Model):
+
+    __tablename__ = "assignments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    assignment_name = db.Column(db.String(200), nullable=False)
+    assignment_desc = db.Column(db.String(200), nullable=False)
+
+
+
+
+
+#class UserForm(StudentForm):
+#    fname = StringField("First Name", validator=[DataRequired()])
+#    lname = StringField("Last Name", validator=[DataRequired()])
+#    major = StringField("Major", validator=[DataRequired()])
+#    email = StringField("Email", validator=[DataRequired()])
+#    submit = StringField("Submit")
 
 
 @login_manager.user_loader
@@ -83,6 +113,25 @@ def login():
 
     login_user(user)
     return redirect(url_for('index'))
+
+
+@app.route("/students", methods=["GET", "POST"])
+def student():
+    if request.method == "GET":
+        return render_template("students.html", error=False)
+
+@app.route("/add/student", methods=["GET", "POST"])
+def add_students():
+    if request.method == "GET":
+        return render_template("add_user.html")
+
+@app.route("/add/assignment", methods=["GET", "POST"])
+def add_assignment():
+    if request.method == "GET":
+        return render_template("add_assignment.html")
+
+
+
 
 @app.route("/logout/")
 @login_required

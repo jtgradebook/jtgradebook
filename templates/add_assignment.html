@@ -1,0 +1,29 @@
+{# ADD ASSIGNMENT HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+<div class="col-lg-12 col-xl-3" "center-justified">
+                <h2>Add a New Assignment</h2>
+                <form action="/assignment" method="POST">
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Assignment"
+                    name="assignment_name"
+                  ></input>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Assignment Description"
+                    name="assignment_dec"
+                 <input type="submit" class="btn btn-success" value="Add Assignment" />
+                </form>
+            </div>
+            <div class="col-lg-12 col-xl-1"></div>
+        </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %}

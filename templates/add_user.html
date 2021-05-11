@@ -1,0 +1,42 @@
+{# ADD USERS HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+<div class="col-lg-12 col-xl-3">
+                <h2>Add a New Student</h2>
+                <form action="/students" method="POST">
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Enter First Name"
+                    name="firstName"
+                  ></input>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Enter Last Name"
+                    name="lastName"
+                  ></input>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Enter Major"
+                    name="major"
+                  ></input>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Enter Email Address"
+                    name="email"
+                  ></input>
+                  <input type="submit" class="btn btn-success" value="Add Student" />
+                </form>
+            </div>
+            <div class="col-lg-12 col-xl-1"></div>
+        </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %}
