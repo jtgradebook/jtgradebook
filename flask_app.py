@@ -1,11 +1,11 @@
 
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required, login_user, LoginManager, logout_user, UserMixin
 from werkzeug.security import check_password_hash
-from datetime import datetime
+#from datetime import datetime
 #from flask_migrate import Migrate
 
 
@@ -55,6 +55,16 @@ class Students(db.Model):
     major = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
 
+    def __init__(self, fname, lname, major,email):
+        self.fname = fname
+        self.lname = lname
+        self.major = major
+        self.email = email
+
+    def __repr__(self):
+        return '<Students %>' % self.fname
+
+
 class Assignments(db.Model):
 
     __tablename__ = "assignments"
@@ -63,41 +73,42 @@ class Assignments(db.Model):
     assignment_name = db.Column(db.String(200), nullable=False)
     assignment_desc = db.Column(db.String(200), nullable=False)
 
+    def __init__(self, assignment_name, assignment_desc):
+        self.assignment_name = assignment_name
+        self.assignment_desc = assignment_desc
 
 
+    def __repr__(self):
+        return '<Assignments %>' % self.assignment_name
 
 
-#class UserForm(StudentForm):
-#    fname = StringField("First Name", validator=[DataRequired()])
-#    lname = StringField("Last Name", validator=[DataRequired()])
-#    major = StringField("Major", validator=[DataRequired()])
-#    email = StringField("Email", validator=[DataRequired()])
-#    submit = StringField("Submit")
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(username=user_id).first()
 
-class Comment(db.Model):
+#class Comment(db.Model):
+#
+#   __tablename__ = "comments"
+#
+#    id = db.Column(db.Integer, primary_key=True)
+#    content = db.Column(db.String(4096))
+#    posted = db.Column(db.DateTime, default=datetime.now)
 
-    __tablename__ = "comments"
-
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(4096))
-    posted = db.Column(db.DateTime, default=datetime.now)
 
 @app.route("/", methods=["GET", "POST"])
+@login_required
 def index():
     if request.method == "GET":
-        return render_template("main_page.html", comments=Comment.query.all())
+        return render_template("main_page.html")
     if not current_user.is_authenticated:
         return redirect(url_for('index'))
 
-    comment = Comment(content=request.form["contents"])
-    db.session.add(comment)
-    db.session.commit()
-    return redirect(url_for('index'))
+#    comment = Comment(content=request.form["contents"])
+#    db.session.add(comment)
+#    db.session.commit()
+#    return redirect(url_for('index'))
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -116,14 +127,24 @@ def login():
 
 
 @app.route("/students", methods=["GET", "POST"])
-def student():
+@login_required
+def allstudents():
     if request.method == "GET":
-        return render_template("students.html", error=False)
+        query = db.session.query(Students).order_by(Students.id.asc())
+        return render_template("students.html", students=query)
 
-@app.route("/add/student", methods=["GET", "POST"])
+@app.route("/add/students", methods=["GET", "POST"])
 def add_students():
-    if request.method == "GET":
+     if request.method == "GET":
         return render_template("add_user.html")
+     if request.method == "POST":
+        student = Students(request.form["fname"],request.form["lname"],request.form["major"],request.form['email'])
+        db.session.add(student)
+        db.session.commit()
+        flash('New Student record was successfully added')
+        # redirect(url_for('allstudents'))
+     return render_template('add_user.html')
+
 
 @app.route("/assignments")
 def assignments():
@@ -134,6 +155,21 @@ def assignments():
 def add_assignment():
     if request.method == "GET":
         return render_template("add_assignment.html")
+    if request.method == "POST":
+        assignment = Assignments(request.form["assignment_name"],request.form["assignment_desc"])
+        db.session.add(assignment)
+        db.session.commit()
+        flash('New assignment record was successfully added')
+        # redirect(url_for('allstudents'))
+    return render_template('add_assignment.html')
+
+
+@app.route("/sort", methods=["GET"])
+@login_required
+def sort():
+    if request.method == "GET":
+        query = db.session.query(Students).order_by(Students.lname.asc())
+        return render_template("sort.html", students=query)
 
 
 

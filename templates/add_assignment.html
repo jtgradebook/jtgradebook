@@ -3,25 +3,30 @@
 
 {% block content%}
 
-<div class="col-lg-12 col-xl-3" "center-justified">
-                <h2>Add a New Assignment</h2>
-                <form action="/assignment" method="POST">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Assignment"
-                    name="assignment_name"
-                  ></input>
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Assignment Description"
-                    name="assignment_dec"
-                 <input type="submit" class="btn btn-success" value="Add Assignment" />
+
+
+
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+    {%- endfor %}
+
+
+<div class="container-fluid h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <h2>Add Assignment</h2><br>
+                <form method="POST" action="/add/assignment">
+                    <label>Assignment Name</label>
+                    <input id ="assignment_name" class="form-control" name="assignment_name" placeholder="Assignment Name" value="{{assignment_name if assignment_name}}" /><br>
+                    <label>Assignment Description</label>
+                    <textarea id="assignment_desc" class="form-control" name="assignment_desc" placeholder="Assignment Description" value="{{assignment_desc if assignment_desc}}"></textarea><br>
+                    <input type = "submit" class="btn btn-success" value = "Add Assignment" />
                 </form>
             </div>
-            <div class="col-lg-12 col-xl-1"></div>
         </div>
     </div>
+</div>
 
 {% endblock %}

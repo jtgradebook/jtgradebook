@@ -1,0 +1,31 @@
+{# Sort HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+<div class="container-fluid">
+        <div class="row">
+            <div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Major</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">id</th>
+                        </tr>
+                    </thead>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{student.lname}}</td>
+                            <td>{{student.fname}}</td>
+                            <td>{{student.major}}</td>
+                            <td>{{student.email}}</td>
+                            <td>{{student.id}}</td>
+                            </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+
+{% endblock %}

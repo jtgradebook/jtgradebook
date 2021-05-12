@@ -3,16 +3,25 @@
 
 {% block content%}
 
-<div class="container">
-  <br>
-  <h1 class="text-center">IS668 Gradebook</h1>
-  <div style="text-align: center">
-  <br>
-
-    {% for assignment in myAssignments %}
-        <li>{{assignment.id}}----{{assignment.assignment_name}} ---{{assignment.assignment_desc}}</li>
-    {% endfor %}
-
+<div class="container-fluid">
+        <div class="row">
+            <div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Assignment Name</th>
+                            <th scope="col">Assignment Description</th>
+                        </tr>
+                    </thead>
+                        {% for assignment in myAssignments %}
+                        <tr>
+                            <td>{{assignment.assignment_name}}</td>
+                            <td>{{assignment.assignment_desc}}</td>
+                            </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
 
 
 {% endblock %}
