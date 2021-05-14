@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+{% block title %}Edit USer{% endblock %}
+{% block content%}
+<div class="container-fluid">
+        <h1> Edit Student</h1>
+        <br/>
+                            <form action="/edit/{{student_to_edit.id}}" method="post">
+                                <input type="text" placeholder="ID" name="id" value="{{student_to_edit.id}}">
+                                <input type="text" placeholder="NAME" name="name" value="{{student_to_edit.name}}">
+                                    <td><input type="submit" class="btn btn-secondary" value="Edit" /></td>
+                            </form>
+
+        </div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{# ADD USERS HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+
+
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+    {%- endfor %}
+
+
+<div class="container-fluid h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <h2>Edit Student</h2><br>
+                <form method="POST" action="/add/students">
+                    <label>First Name</label>
+                    <input id ="fname" class="form-control" name="fname" placeholder="First Name" value="{{fname if fname}}" /><br>
+                    <label>Last Name</label>
+                    <input id="lname" class="form-control" name="lname" placeholder="Last Name" value="{{lname if lname}}"/><br>
+                    <label>Major</label>
+                    <input id="major" class="form-control" name="major" placeholder="Major" value="{{major if major}}"/><br>
+                    <label>Email</label>
+                    <input id="email" class="form-control" name="email" placeholder="Email" value="{{email if email}}"/><br>
+                    <input type = "submit" class="btn btn-success" value = "Add Student" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

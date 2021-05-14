@@ -11,12 +11,18 @@
                         <tr>
                             <th scope="col">Assignment Name</th>
                             <th scope="col">Assignment Description</th>
+                            <th scope="col">Edit Assignment</th>
+                            <th scope="col">Delete Assignment</th>
                         </tr>
                     </thead>
                         {% for assignment in myAssignments %}
                         <tr>
                             <td>{{assignment.assignment_name}}</td>
                             <td>{{assignment.assignment_desc}}</td>
+                            <td><a href="/update/{{assignment_id}}">Edit Assignment</a></td>
+
+                            <td><a href="/deleteAssignment/{{ assignment.id}}" class="btn btn-outline_danger btn-sm">Delete</a></td>
+
                             </tr>
                         {% endfor %}
                 </table>

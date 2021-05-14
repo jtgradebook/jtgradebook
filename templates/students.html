@@ -13,6 +13,8 @@
                             <th scope="col">Last Name</th>
                             <th scope="col">Major</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
                         </tr>
                     </thead>
                         {% for student in students %}
@@ -22,6 +24,9 @@
                             <td>{{student.lname}}</td>
                             <td>{{student.major}}</td>
                             <td>{{student.email}}</td>
+                            <td><a href="/edit/{{student.id}} {{student.name}}">Edit Student</a></td>
+
+                            <td><a href="/delete/{{ student.id}}" class="btn btn-outline_danger btn-sm">Delete</a></td>
                             </tr>
                         {% endfor %}
                 </table>

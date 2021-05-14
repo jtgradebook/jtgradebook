@@ -81,6 +81,14 @@ class Assignments(db.Model):
     def __repr__(self):
         return '<Assignments %>' % self.assignment_name
 
+class Grades(db.Model):
+
+    __tablename__ = "grades"
+
+    id = db.Column(db.Integer, primary_key=True)
+    assignment_id =db.Column(db.Integer, db.ForeignKey("assignments.id", ondelete="CASCADE"))
+    student_id = db.Column(db.Integer, db.ForeignKey("students.id", ondelete="CASCADE"))
+    percentage = db.Column(db.Float)
 
 
 
@@ -163,6 +171,16 @@ def add_assignment():
         # redirect(url_for('allstudents'))
     return render_template('add_assignment.html')
 
+@app.route('/update/<int:id>', methods=["GET", "POST"])
+def update_assignment(id):
+    assignment_to_update = Assignments.query.get_or_404(id)
+    if request.method == "POST":
+        assignment_to_update.name = request.form["assignment_name"]
+        try:
+            db.session.commit()
+            return redirect('/assignments')
+        except:
+            return "There was a problem updating that Assignment"
 
 @app.route("/sort", methods=["GET"])
 @login_required
@@ -171,6 +189,42 @@ def sort():
         query = db.session.query(Students).order_by(Students.lname.asc())
         return render_template("sort.html", students=query)
 
+
+#Update student ID working but name is not
+@app.route("/edit/<id>", methods=["GET", "POST"])
+def edit(id):
+    student_to_edit = Students.query.get_or_404(id)
+    if request.method == "POST":
+        student_to_edit.id = request.form['id']
+        student_to_edit.name = request.form['name']
+
+        try:
+            db.session.commit()
+            return redirect('/students')
+        except:
+            return "There was a problem"
+    else:
+        return render_template("edit_user.html", student_to_edit=student_to_edit)
+
+@app.route("/delete/<int:id>")
+def delete(id):
+    student_to_delete = Students.query.get_or_404(id)
+    try:
+        db.session.delete(student_to_delete)
+        db.session.commit()
+        return redirect('/students')
+    except:
+        return "there was a problem"
+
+@app.route("/deleteAssignment/<int:id>")
+def deleteassignment(id):
+    assignments_to_delete = Assignments.query.get_or_404(id)
+    try:
+        db.session.delete(assignments_to_delete)
+        db.session.commit()
+        return redirect('/assignments')
+    except:
+        return "there was a problem"
 
 
 
