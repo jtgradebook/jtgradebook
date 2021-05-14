@@ -2,15 +2,24 @@
 {% extends "base.html" %}
 {% block title %}Edit USer{% endblock %}
 {% block content%}
-<div class="container-fluid">
-        <h1> Edit Student</h1>
-        <br/>
-                            <form action="/edit/{{student_to_edit.id}}" method="post">
-                                <input type="text" placeholder="ID" name="id" value="{{student_to_edit.id}}">
-                                <input type="text" placeholder="NAME" name="name" value="{{student_to_edit.name}}">
-                                    <td><input type="submit" class="btn btn-secondary" value="Edit" /></td>
-                            </form>
-
+<div class="container-fluid h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <h2>Edit Student</h2><br>
+                <form action="/edit/{{student_to_edit.id}}" method="POST">
+                    <label>First Name</label>
+                    <input id ="fname" class="form-control" name="fname" placeholder="First Name" value="{{student_to_edit.fname}}" /><br>
+                    <label>Last Name</label>
+                    <input id="lname" class="form-control" name="lname" placeholder="Last Name" value="{{student_to_edit.lname}}"/><br>
+                    <label>Major</label>
+                    <input id="major" class="form-control" name="major" placeholder="Major" value="{{student_to_edit.major}}"/><br>
+                    <label>Email</label>
+                    <input id="email" class="form-control" name="email" placeholder="Email" value="{{student_to_edit.email}}"/><br>
+                    <input type = "submit" class="btn btn-success" value = "Edit Student" />
+                </form>
+            </div>
         </div>
+    </div>
+</div>
 
 {% endblock %}

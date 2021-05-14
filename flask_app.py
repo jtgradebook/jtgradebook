@@ -195,8 +195,10 @@ def sort():
 def edit(id):
     student_to_edit = Students.query.get_or_404(id)
     if request.method == "POST":
-        student_to_edit.id = request.form['id']
-        student_to_edit.name = request.form['name']
+        student_to_edit.fname = request.form['fname']
+        student_to_edit.lname = request.form['lname']
+        student_to_edit.major = request.form['major']
+        student_to_edit.email = request.form['email']
 
         try:
             db.session.commit()
@@ -204,7 +206,8 @@ def edit(id):
         except:
             return "There was a problem"
     else:
-        return render_template("edit_user.html", student_to_edit=student_to_edit)
+       return render_template("edit_user.html", student_to_edit=student_to_edit)
+
 
 @app.route("/delete/<int:id>")
 def delete(id):
@@ -225,7 +228,6 @@ def deleteassignment(id):
         return redirect('/assignments')
     except:
         return "there was a problem"
-
 
 
 @app.route("/logout/")
