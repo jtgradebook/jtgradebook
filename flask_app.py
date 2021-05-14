@@ -245,7 +245,6 @@ def deleteassignment(id):
 @app.route("/grades", methods=["GET"])
 @login_required
 def grades():
-    # querying all students & grades in ascending id order, with joined load for all foreign key data
     query = db.session.query(Grades).order_by(Grades.student_id.asc(),Grades.assignment_id.asc())
     query = query.options(
         joinedload(Grades.students),
