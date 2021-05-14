@@ -1,0 +1,32 @@
+{# add Grades HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+<body>
+  <div class="container">
+
+
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+    {%- endfor %}
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <h2>Add Grade</h2><br>
+                <form action="/add_grade" method="POST">
+                    <label>Assignment Name</label><select name="assignment_id">{% for assignment in assignments %}<option value={{assignment.id}}>{{assignment.assignment_name}} {% endfor %}</select><br>
+                    <label>Student Name</label><select name="student_id">{% for student in students %}<option value={{student.id}}>{{student.lname}} {{student.fname}}{% endfor %}</select>
+                    <label>Percentage</label><input name='percentage' placeholder='grade (percentage)' />
+                    <input type = "submit" class="btn btn-success" value = "Add Grade" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

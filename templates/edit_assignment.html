@@ -16,12 +16,12 @@
 <div class="container-fluid h-100">
     <div class="row justify-content-center align-items-center h-100">
         <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
-            <h2>Update Assignment</h2><br>
-                <form method="POST" action="/update/{{assignment_to_update.assignment_name}}">
+            <h2>Edit Assignment</h2><br>
+                <form action="/update/{{assignment_to_edit.id}}" method="POST">
                     <label>Assignment Name</label>
-                    <input name="assignment_name" placeholder="Update Assignment Name" value="{{assignment_to_update.assignment_name}}" /><br>
+                    <input id ="assignment_name" class="form-control" name="assignment_name" placeholder="Assignment Name" value="{{assignment_to_edit.assignment_name}}" /><br>
                     <label>Assignment Description</label>
-                    <textarea id="assignment_desc" class="form-control" name="assignment_desc" placeholder="Update Description" value="{{assignment_to_update.assignment_desc}}"></textarea><br>
+                    <textarea id ="assignment_desc" class="form-control" name="assignment_desc" placeholder="Assignment Description" value="{{assignment_to_edit.assignment_desc}}">{{assignment_to_edit.assignment_desc}}</textarea><br>
                     <input type = "submit" class="btn btn-success" value = "Update Assignment" />
                 </form>
             </div>
@@ -30,3 +30,4 @@
 </div>
 
 {% endblock %}
+

@@ -1,0 +1,35 @@
+{# Grades HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+
+
+<body>
+  <div class="container">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Assignment</th>
+          <th>Name</th>
+          <th>Grade</th>
+          <th>Edit Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          {% for grade in grades %}
+
+        </tr>
+        <tr>
+          <td>{{grade.assignments.assignment_name}}</td>
+          <td><b>{{grade.students.fname}} {{grade.students.lname}}</b></td>
+          <td>{{grade.percentage}}%</td>
+          <td><a href="/edit_grade/{{grade.id}}" class="btn btn-outline-danger" >Edit Grade</a></td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    <a href="/add_grade" class="btn btn-success" role="button" aria-pressed="true">Add Grade</a>
+{% endblock %}

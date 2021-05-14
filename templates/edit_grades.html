@@ -1,0 +1,34 @@
+{# Grades HTML #}
+{% extends "base.html" %}
+
+{% block content%}
+
+
+
+<body>
+  <div class="container">
+
+
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+    {%- endfor %}
+
+
+<div class="container">
+    <div class="row justify-content-center align-items-center h-100 ">
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <h2>Edit Grade</h2><br>
+                <form action="/edit_grade/{{grade_to_edit.id}}" method="POST">
+                    <label>Assignment Name</label><b>:   {{grade_to_edit.assignments.assignment_name}}</b>
+                    <label>Student Name</label><b>:    {{grade_to_edit.students.fname}} {{grade_to_edit.students.lname}}</b>
+                    <label>Enter Grade</label><input name='percentage' value='{{grade_to_edit.percentage}}' placeholder='grade (percentage)' /></b>
+                    <input type = "submit" class="btn btn-success" value = "Update Grade" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

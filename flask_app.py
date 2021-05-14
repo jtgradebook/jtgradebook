@@ -5,6 +5,7 @@ from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, login_required, login_user, LoginManager, logout_user, UserMixin
 from werkzeug.security import check_password_hash
+from sqlalchemy.orm import joinedload, relationship, backref
 #from datetime import datetime
 #from flask_migrate import Migrate
 
@@ -90,7 +91,13 @@ class Grades(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey("students.id", ondelete="CASCADE"))
     percentage = db.Column(db.Float)
 
+    students = relationship(Students, backref=backref("grades", cascade="all"))
+    assignments = relationship(Assignments, backref=backref("grades", cascade="all"))
 
+    def __init__(self, assignment_id, student_id, percentage):
+        self.assignment_id = assignment_id
+        self.student_id = student_id
+        self.percentage = percentage
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -171,16 +178,21 @@ def add_assignment():
         # redirect(url_for('allstudents'))
     return render_template('add_assignment.html')
 
-@app.route('/update/<int:id>', methods=["GET", "POST"])
-def update_assignment(id):
-    assignment_to_update = Assignments.query.get_or_404(id)
+#Update Assignment ID working but name is not
+@app.route("/update/<id>", methods=["GET", "POST"])
+def assignmentedit(id):
+    assignment_to_edit = Assignments.query.get_or_404(id)
     if request.method == "POST":
-        assignment_to_update.name = request.form["assignment_name"]
+        assignment_to_edit.assignment_name = request.form['assignment_name']
+        assignment_to_edit.assignment_desc = request.form['assignment_desc']
+
         try:
             db.session.commit()
             return redirect('/assignments')
         except:
-            return "There was a problem updating that Assignment"
+            return "There was a problem"
+    else:
+        return render_template("edit_assignment.html", assignment_to_edit=assignment_to_edit)
 
 @app.route("/sort", methods=["GET"])
 @login_required
@@ -228,6 +240,54 @@ def deleteassignment(id):
         return redirect('/assignments')
     except:
         return "there was a problem"
+
+
+@app.route("/grades", methods=["GET"])
+@login_required
+def grades():
+    # querying all students & grades in ascending id order, with joined load for all foreign key data
+    query = db.session.query(Grades).order_by(Grades.student_id.asc(),Grades.assignment_id.asc())
+    query = query.options(
+        joinedload(Grades.students),
+        joinedload(Grades.assignments)
+        )
+
+    return render_template("grades.html", grades=query)
+
+@app.route("/edit_grade/<int:id>", methods=["GET","POST"])
+@login_required
+def editgrades(id):
+    grade_to_edit = Grades.query.get_or_404(id)
+
+    if request.method == "POST":
+        grade_to_edit.percentage = request.form['percentage']
+
+        try:
+            db.session.commit()
+            return redirect('/grades')
+        except:
+            return "There was a problem"
+    else:
+       return render_template("edit_grades.html", grade_to_edit=grade_to_edit)
+
+@app.route("/add_grade", methods=["GET","POST"])
+@login_required
+def addgrade():
+    if request.method == "POST":
+        grade_to_add = Grades(request.form['assignment_id'], request.form['student_id'], request.form['percentage'])
+        db.session.add(grade_to_add)
+        db.session.commit()
+        flash('New grade record was successfully added')
+
+        try:
+            db.session.commit()
+            return redirect('/grades')
+        except:
+            return "There was a problem"
+    else:
+       assignments = db.session.query(Assignments).order_by(Assignments.id.asc())
+       students = db.session.query(Students).order_by(Students.id.asc())
+       return render_template("add_grades.html", assignments=assignments, students=students)
 
 
 @app.route("/logout/")

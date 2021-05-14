@@ -3,12 +3,13 @@
 
 {% block content%}
 
-<div class="container-fluid">
+<div class="container">
         <div class="row">
             <div>
-                <table class="table table-bordered">
+                <table class="table">
                     <thead>
                         <tr>
+                            <th scope="col">id</th>
                             <th scope="col">Assignment Name</th>
                             <th scope="col">Assignment Description</th>
                             <th scope="col">Edit Assignment</th>
@@ -17,15 +18,17 @@
                     </thead>
                         {% for assignment in myAssignments %}
                         <tr>
+                            <td>{{ assignment.id}}</td>
                             <td>{{assignment.assignment_name}}</td>
                             <td>{{assignment.assignment_desc}}</td>
-                            <td><a href="/update/{{assignment_id}}">Edit Assignment</a></td>
+                            <td><a href="/update/{{ assignment.id}}">Edit Assignment</a></td>
 
-                            <td><a href="/deleteAssignment/{{ assignment.id}}" class="btn btn-outline_danger btn-sm">Delete</a></td>
+                            <td><a href="/deleteAssignment/{{ assignment.id}}" class="btn btn-outline-danger">Delete</a></td>
 
                             </tr>
                         {% endfor %}
                 </table>
+                <a href="add/assignment" class="btn btn-success" role="button" aria-pressed="true">Add Assignment</a>
             </div>
         </div>
 
